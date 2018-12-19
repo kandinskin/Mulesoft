@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:mule-box-connector="http://www.mulesoft.org/schema/mule/mule-box-connector"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mule-box-connector http://www.mulesoft.org/schema/mule/mule-box-connector/current/mule-mule-box-connector.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="78946704-711b-4c55-9ba4-48ac75fa21d7" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<mule-box-connector:config name="Mule_box_connector_Config" 
+	                           doc:name="Mule-box-connector Config" 
+	                           doc:id="bfc1cb9b-1084-4418-bd72-fa27a30fad4d" 
+	                           property_clientId="${config.clientId}" 
+	                           property_clientSecret="${config.clientSecret}" 
+	                           property_localCallbackConfig="HTTP_Listener_config" 
+	                           property_externalCallbackUrl="http://localhost:8081/callback" />
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="34880499-70db-4178-96dd-3aa8e6753122" fetchAllApexRestMetadata="true" fetchAllApexSoapMetadata="true">
+		<salesforce:oauth-user-pass-connection consumerKey="${sf.clientid}" consumerSecret="${sf.clientsecret}" username="${sf.username}" password="${sf.password}"/>
+	</salesforce:sfdc-config>
+</mule>

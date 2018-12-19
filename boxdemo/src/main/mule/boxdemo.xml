@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mule-box-connector="http://www.mulesoft.org/schema/mule/mule-box-connector" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/mule-box-connector http://www.mulesoft.org/schema/mule/mule-box-connector/current/mule-mule-box-connector.xsd">
+	
+	<configuration-properties file="mule-artifact.properties"/>
+	
+	<flow name="boxdemoFlow" doc:id="e81818e2-1d77-4fe5-8586-50db543b5c68" >
+		<http:listener doc:name="Listener" doc:id="19abc05f-2233-4a8a-91dc-fad880eb3da5" config-ref="HTTP_Listener_config" path="/boxdemo"/>
+		<ee:transform doc:name="Set folder properties" doc:id="fc3ec2ed-6035-488e-a80c-1f6b698f97f6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	parent: {
+		id: 0
+	},
+	"type": "folder",
+	name: "SampleFolder"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<mule-box-connector:create-folder doc:name="Create folder" doc:id="d1f0e409-4335-4477-865c-e4c0b962e567" config-ref="Mule_box_connector_Config">
+		</mule-box-connector:create-folder>
+		<logger level="INFO" doc:name="Logger" doc:id="68f2b3c1-b09b-41e8-8983-2ef0d5dba2f6" message="#[payload.id]"/>
+		<mule-box-connector:get-folder doc:name="Get folder" doc:id="78bdb947-393c-4580-9f83-f0e801e040cd" config-ref="Mule_box_connector_Config" folder-id="#[payload.id]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="a95465c1-5e3a-4403-a324-ac95c10520aa" message="#[payload]"/>
+		<mule-box-connector:delete-folder doc:name="Delete folder" doc:id="9a6f8e30-4018-4a17-b916-ccee8aadad5d" config-ref="Mule_box_connector_Config" folder-id="#[payload.id]"/>
+		<ee:transform doc:name="Last message" doc:id="f7b78cb5-1c86-4ec8-a174-61055c32e901" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	result : "Folder got created, retrieved and deleted successfully"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

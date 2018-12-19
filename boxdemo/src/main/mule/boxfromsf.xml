@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="boxfromsfFlow" doc:id="485dd5fd-5cd5-49fe-afbe-03ed526cf7c4" >
+		<http:listener doc:name="Listener" doc:id="0ec93053-4e72-4d9b-9b06-cc89a12e958a" config-ref="HTTP_Listener_config" path="/testboxsf"/>
+		<ee:transform doc:name="Transform Message" doc:id="9343a350-563e-4fe2-a107-2f98b5e2cd21" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+    companyName: ["elem1","elem2"],
+    caseType: "someValue2"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:invoke-apex-rest-method doc:name="Invoke apex rest method" doc:id="01680d3b-5fa3-4a1c-a077-5faedef27d29" config-ref="Salesforce_Config" className="RESTBoxCreateFolder" methodName="createFolder^/TestBoxCreateFolder^HttpPost^String"/>
+		<ee:transform doc:name="Transform Message" doc:id="ecbeed25-2e76-44c2-ba16-3b2e3a82fffe" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="08de1a9b-ee86-4e29-b4d0-438649a6c09d" message="#[payload]"/>
+	</flow>
+</mule>
