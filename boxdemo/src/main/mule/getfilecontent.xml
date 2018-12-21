@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:mule-box-connector="http://www.mulesoft.org/schema/mule/mule-box-connector" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:mule-box-connector="http://www.mulesoft.org/schema/mule/mule-box-connector"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/mule-box-connector http://www.mulesoft.org/schema/mule/mule-box-connector/current/mule-mule-box-connector.xsd">
-	<flow name="getfilecontentFlow" doc:id="1337315e-f4d5-4e3f-a92e-3d5cee47548e" >
-		<http:listener doc:name="Listener" doc:id="83b5b146-9712-44aa-ad82-c00c063c4c2e" config-ref="HTTP_Listener_config" path="/getfilecontent"/>
-		<mule-box-connector:get-file-content doc:name="Get file content" doc:id="1c7c2e6c-468e-4f98-9612-1bcbb2e68984" config-ref="Mule_box_connector_Config" file-id="61189312088"/>
-		<logger level="INFO" doc:name="Logger" doc:id="ffa7388c-6465-4766-9fd0-c49ed8cf94ad" message="#[payload]"/>
+http://www.mulesoft.org/schema/mule/mule-box-connector http://www.mulesoft.org/schema/mule/mule-box-connector/current/mule-mule-box-connector.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="getfilecontentFlow" doc:id="5db7026b-1779-4cc8-aded-4ebf89fdd50a" >
+		<http:listener doc:name="Listener" doc:id="349badab-6387-4a93-82c8-044e9e295b27" config-ref="HTTP_Listener_config" path="/getfilecontent" outputMimeType="application/csv"/>
+		<mule-box-connector:get-file-content doc:name="Get file content" doc:id="27b10134-88b0-445b-ab80-022d9013027d" config-ref="Mule_box_connector_Config" file-id="372080691411"/>
+		<ee:transform doc:name="Transform Message" doc:id="717dc97d-ae07-44ea-ab1f-0ccaa18236f3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="6ae3ebb5-348a-4711-973b-5abe837d4e74" message="#[message]"/>
+	</flow>
+	<flow name="getfileFlow" doc:id="442e2e9f-7b49-4b8f-8a03-d931c812e1e4" >
+		<http:listener doc:name="Listener" doc:id="d0fcf46d-6e1b-4d08-94a7-92f8c98db78e" config-ref="HTTP_Listener_config" path="/getfile"/>
+		<mule-box-connector:get-file doc:name="Get file" doc:id="d0ca3c67-b84e-41ad-b685-3a50ae514709" config-ref="Mule_box_connector_Config" file-id="372080691411"/>
+		<logger level="INFO" doc:name="Logger" doc:id="8d4bea66-a03f-4abb-b015-f46ff8bac34e" message="#[payload]"/>
+	</flow>
+	<flow name="getfileversionFlow" doc:id="6034291b-3d02-4c25-b15b-639b9bb5af1e" >
+		<http:listener doc:name="Listener" doc:id="2d707994-1307-48d7-92a9-2dfa0eee0672" config-ref="HTTP_Listener_config" path="/getfileversion" />
+		<mule-box-connector:get-file-versions doc:name="Get file versions" doc:id="ff2d012d-dab8-48a0-8aed-2334e2a3fd48" config-ref="Mule_box_connector_Config" file-id="372080691411"/>
+		<logger level="INFO" doc:name="Copy_of_Logger" doc:id="a2d74a12-7626-42e9-aecc-063b583675df" message="#[payload]" />
 	</flow>
 </mule>

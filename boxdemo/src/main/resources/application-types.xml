@@ -5,5 +5,64 @@
       <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
 type: string]]></types:shape>
     </types:type>
+    <types:type name="TestFile" format="json">
+      <types:shape format="weave" example="examples/TestFileExample.json"><![CDATA[%dw 2.0
+type TestFile = {|
+  testfile: Array<{|
+    field1: String, 
+    field2: String, 
+    field3: String
+  |}>
+|} {"MetadataFormat": "json",
+"example": "{\"testfile\":[{\"field1\":\"test1\",\"field2\":\"test2\",\"field3\":\"test3\"}]}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="TestFileTxt" format="csv">
+      <types:shape format="weave" example="examples/TestFileRead.csv"><![CDATA[%dw 2.0
+type TestFileTxt = Array<{|
+  field1: String, 
+  field2: String, 
+  field3: String
+|}> {"MetadataFormat": "csv"}
+
+]]></types:shape>
+      <types:properties>
+        <types:property name="headerLineNumber" value="0"/>
+        <types:property name="header" value="true"/>
+        <types:property name="isQuotedString" value="false"/>
+      </types:properties>
+    </types:type>
+    <types:type name="TestFileBox" format="java">
+      <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="TestBinary" format="java">
+      <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
   </types:catalog>
+  <types:enrichment select="#852b7c18-8683-4d11-9597-cca9efd31a33">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="TestFileTxt"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="TestFile"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#27b10134-88b0-445b-ab80-022d9013027d">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="TestFileTxt"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>
