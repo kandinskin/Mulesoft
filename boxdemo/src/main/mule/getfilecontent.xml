@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mule-box-connector="http://www.mulesoft.org/schema/mule/mule-box-connector" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mule-box-connector http://www.mulesoft.org/schema/mule/mule-box-connector/current/mule-mule-box-connector.xsd">
+	<flow name="getfilecontentFlow" doc:id="1337315e-f4d5-4e3f-a92e-3d5cee47548e" >
+		<http:listener doc:name="Listener" doc:id="83b5b146-9712-44aa-ad82-c00c063c4c2e" config-ref="HTTP_Listener_config" path="/getfilecontent"/>
+		<mule-box-connector:get-file-content doc:name="Get file content" doc:id="1c7c2e6c-468e-4f98-9612-1bcbb2e68984" config-ref="Mule_box_connector_Config" file-id="61189312088"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ffa7388c-6465-4766-9fd0-c49ed8cf94ad" message="#[payload]"/>
+	</flow>
+</mule>
