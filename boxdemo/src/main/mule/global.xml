@@ -19,4 +19,5 @@ http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mu
 	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="34880499-70db-4178-96dd-3aa8e6753122" fetchAllApexRestMetadata="true" fetchAllApexSoapMetadata="true">
 		<salesforce:oauth-user-pass-connection consumerKey="${sf.clientid}" consumerSecret="${sf.clientsecret}" username="${sf.username}" password="${sf.password}"/>
 	</salesforce:sfdc-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="2e509a15-3f9d-4488-8be5-5a1281c65c35" basePath="/firstrequest" />
 </mule>
