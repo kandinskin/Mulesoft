@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="42fb8d1b-49bd-428d-b9f7-d9bc8a411132" >
+		<file:connection workingDir="C:\IQVIA\Safety\Mulesoft" />
+	</file:config>
+	<flow name="testfileFlow" doc:id="896f17d9-1ff3-498a-9d35-ad07c6feb70c" >
+		<http:listener doc:name="Listener" doc:id="bc159758-21da-4bf2-a1d0-fef0c5317826" config-ref="HTTP_Listener_config" path="/testfile" outputMimeType="application/csv"/>
+		<file:read doc:name="Read" doc:id="39f6dc78-73bf-4c78-86f0-54cd9ea36794" config-ref="File_Config" path="TestFileRead.csv" outputEncoding="UTF-8">
+			<ee:repeatable-file-store-stream bufferUnit="MB" />
+		</file:read>
+		<ee:transform doc:name="Transform Message" doc:id="852b7c18-8683-4d11-9597-cca9efd31a33" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	testfile: payload map ( payload01 , indexOfPayload01 ) -> {
+		field1: payload01.field1,
+		field2: payload01.field2,
+		field3: payload01.field3
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="643e779b-d6f3-4111-abc1-39f1c569c0ee" message="#[payload]"/>
+	</flow>
+</mule>

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:mule-box-connector="http://www.mulesoft.org/schema/mule/mule-box-connector"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:mule-box-connector="http://www.mulesoft.org/schema/mule/mule-box-connector" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/mule-box-connector http://www.mulesoft.org/schema/mule/mule-box-connector/current/mule-mule-box-connector.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
 	<flow name="getfilecontentFlow" doc:id="5db7026b-1779-4cc8-aded-4ebf89fdd50a" >
-		<http:listener doc:name="Listener" doc:id="349badab-6387-4a93-82c8-044e9e295b27" config-ref="HTTP_Listener_config" path="/getfilecontent" outputMimeType="application/csv"/>
+		<http:listener doc:name="Listener" doc:id="349badab-6387-4a93-82c8-044e9e295b27" config-ref="HTTP_Listener_config" path="/getfilecontent" outputMimeType="text/csv"/>
 		<mule-box-connector:get-file-content doc:name="Get file content" doc:id="27b10134-88b0-445b-ab80-022d9013027d" config-ref="Mule_box_connector_Config" file-id="372080691411"/>
 		<ee:transform doc:name="Transform Message" doc:id="717dc97d-ae07-44ea-ab1f-0ccaa18236f3" >
 			<ee:message >

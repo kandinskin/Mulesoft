@@ -56,13 +56,4 @@ type: string]]></types:shape>
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#27b10134-88b0-445b-ab80-022d9013027d">
-    <types:processor-declaration>
-      <types:output-event>
-        <types:message>
-          <types:payload type="TestFileTxt"/>
-        </types:message>
-      </types:output-event>
-    </types:processor-declaration>
-  </types:enrichment>
 </types:mule>
